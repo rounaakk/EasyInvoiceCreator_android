@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Easy Invoice Creator</string>
+    <string name="company_name">Company Name</string>
+    <string name="company_details">Company Details</string>
+    <string name="bank_details">Bank Details</string>
+    <string name="invoice_history">Invoice History</string>
+</resources>

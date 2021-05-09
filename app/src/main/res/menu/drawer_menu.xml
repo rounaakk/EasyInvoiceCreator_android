@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<group
+    android:id="@+id/grp_1">
+
+    <item
+        android:id="@+id/drawer_create_invoice"
+        android:title="Create Invoice"
+        android:contentDescription="Create Invoice" />
+    <item
+        android:id="@+id/drawer_invoice_history"
+        android:title="@string/invoice_history"
+        android:contentDescription="@string/invoice_history" />
+
+    <item
+        android:id="@+id/drawer_settings"
+        android:title="Settings"
+        android:contentDescription="Settings" />
+
+
+
+</group>
+
+<group
+    android:id="@+id/grp_2"
+    android:checkableBehavior="none">
+<item
+        android:id="@+id/logout"
+        android:title="Logout" />
+</group>
+
+</menu>
