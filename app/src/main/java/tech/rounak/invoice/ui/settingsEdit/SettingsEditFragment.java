@@ -6,10 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,9 +23,6 @@ public class SettingsEditFragment extends Fragment {
     private SettingsEditViewModel mViewModel;
     SettingsEditFragmentBinding binding;
     NavController navController;
-    private FirebaseAuth mAuth;
-    FirebaseUser currentUser;
-    BottomAppBar bottomAppBar;
     BottomSheetBehavior bottomSheetBehavior;
 
     public static SettingsEditFragment newInstance() {
@@ -45,12 +39,10 @@ public class SettingsEditFragment extends Fragment {
 
         mViewModel = new ViewModelProvider(this).get(SettingsEditViewModel.class);
         binding.setViewModel(mViewModel);
+        mViewModel.fetchUserDetails();
         navController = NavHostFragment.findNavController(this);
         setupBottomAppBar();
 
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
 
         mViewModel.toast.observe(getViewLifecycleOwner(), new EventObserver<String>(new EventObserver.EventUnhandledContent<String>() {
             @Override
@@ -69,7 +61,7 @@ public class SettingsEditFragment extends Fragment {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         //Managing BottomAppBarUi
-        binding.scrim.setOnClickListener(view -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN));
+//        binding.scrim.setOnClickListener(view -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN));
         binding.bottomAppBar.setNavigationOnClickListener(view -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
         binding.navView.setNavigationItemSelectedListener(item -> {

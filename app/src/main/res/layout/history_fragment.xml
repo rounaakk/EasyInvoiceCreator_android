@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.history.HistoryFragment">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="tech.rounak.invoice.ui.history.HistoryViewModel" />
+        <variable
+            name="invoiceAdapter"
+            type="tech.rounak.invoice.adapters.InvoiceAdapter" />
+
+    </data>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:background="#f2f3f4"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.history.HistoryFragment">
+    android:layout_height="match_parent">
 
     <!-- Note: A RecyclerView can also be used -->
     <androidx.core.widget.NestedScrollView
@@ -31,15 +44,30 @@
                 android:textSize="32sp" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/history_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:adapter="@{invoiceAdapter}"
                 tools:listitem="@layout/card_invoice"/>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.bottomappbar.BottomAppBar
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        tools:visibility="gone"
+        app:behavior_hideable="true"
+        app:headerLayout="@layout/drawer_header"
+        android:backgroundTint="@color/background_offwhite"
+        app:menu="@menu/drawer_menu" />
+
+
+        <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,6 +80,7 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/fab"
         android:backgroundTint="@color/colorAccent"
         app:srcCompat="@drawable/ic_reply_24"
         app:layout_anchor="@id/bottomAppBar"
@@ -60,3 +89,5 @@
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

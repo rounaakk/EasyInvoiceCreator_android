@@ -15,7 +15,11 @@
             app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/action_dashboardFragment_to_invoiceCreateFragment"
-            app:destination="@id/invoiceCreateFragment" />
+            app:destination="@id/invoiceCreateFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
         <action
             android:id="@+id/action_dashboardFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
@@ -29,7 +33,13 @@
         android:id="@+id/invoiceCreateFragment"
         android:name="tech.rounak.invoice.ui.createInvoice.InvoiceCreateFragment"
         android:label="invoice_create_fragment"
-        tools:layout="@layout/invoice_create_fragment" />
+        tools:layout="@layout/invoice_create_fragment" >
+
+        <action
+            android:id="@+id/action_invoiceCreateFragment_pop"
+            app:popUpTo="@id/invoiceCreateFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="tech.rounak.invoice.ui.settings.SettingsFragment"

@@ -54,12 +54,13 @@ android:layout_height="match_parent">
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Customer Name"
+            android:hint="Company Name"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.companyName}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -73,6 +74,7 @@ android:layout_height="match_parent">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.mobileNumber}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -86,6 +88,7 @@ android:layout_height="match_parent">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.emailAddress}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -99,6 +102,7 @@ android:layout_height="match_parent">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.gstin}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -112,6 +116,7 @@ android:layout_height="match_parent">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.pan}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -125,6 +130,7 @@ android:layout_height="match_parent">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.address}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -147,6 +153,7 @@ android:layout_height="match_parent">
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.city}"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -163,6 +170,7 @@ android:layout_height="match_parent">
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.state}"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -179,6 +187,7 @@ android:layout_height="match_parent">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.pin}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -202,6 +211,7 @@ android:layout_height="match_parent">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.accountName}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -224,6 +234,7 @@ android:layout_height="match_parent">
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.bankName}"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -240,6 +251,7 @@ android:layout_height="match_parent">
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.branchName}"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -256,6 +268,7 @@ android:layout_height="match_parent">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.accountNumber}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -269,6 +282,7 @@ android:layout_height="match_parent">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.ifsc}"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -280,10 +294,6 @@ android:layout_height="match_parent">
 </androidx.core.widget.NestedScrollView>
 
 
-    <FrameLayout
-        android:id="@+id/scrim"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -308,7 +318,7 @@ android:layout_height="match_parent">
 
 <com.google.android.material.floatingactionbutton.FloatingActionButton
     android:id="@+id/fab_settings_save"
-    android:onClick="@{viewModel::test}"
+    android:onClick="@{viewModel::saveUserDetails}"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:backgroundTint="@color/colorAccent"

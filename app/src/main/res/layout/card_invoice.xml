@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="8dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="5dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,22 +28,24 @@
 
             <TextView
                 android:id="@+id/money"
+                android:maxLength="7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:textColor="@color/green"
                 android:textSize="24sp"
+                android:text="@{invoiceItem.total}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="540" />
+                tools:text="5408" />
 
             <TextView
-                android:id="@+id/rs"
+                android:id="@+id/tv_currency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
-                android:text="Rs."
+                android:text="@{invoiceItem.currency}"
                 android:textColor="@color/green"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="@+id/money"
@@ -54,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:text="@{invoiceItem.dateTime}"
                 app:layout_constraintStart_toStartOf="@+id/customer_name"
                 app:layout_constraintTop_toBottomOf="@+id/customer_name"
                 tools:text="12/07/2020" />
@@ -64,6 +68,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/material_on_surface_emphasis_high_type"
                 android:textSize="16sp"
+                android:text="@{invoiceItem.customerName}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Rounak Chourasia" />
@@ -72,6 +77,7 @@
                 android:id="@+id/bill_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{invoiceItem.invoiceFullText}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/customer_name"
                 app:layout_constraintTop_toBottomOf="@+id/transaction_date"

@@ -12,7 +12,7 @@
 
     <item
         android:id="@+id/menu_list"
-        android:icon="@drawable/ic_list_24"
+        android:icon="@drawable/ic_books_24"
         android:title="History"
         android:contentDescription="History"
         app:showAsAction="always"

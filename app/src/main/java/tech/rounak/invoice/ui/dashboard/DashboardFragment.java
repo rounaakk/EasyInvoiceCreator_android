@@ -80,10 +80,11 @@ public class DashboardFragment extends Fragment {
         binding.scrim.setOnClickListener(view -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN));
         binding.bottomAppBar.setNavigationOnClickListener(view -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
+
         binding.navView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.drawer_create_invoice:
-                    Toast.makeText(getContext(), "Create Invoice", Toast.LENGTH_SHORT).show();
+                    navController.navigate(R.id.action_dashboardFragment_to_invoiceCreateFragment);
                     break;
             }
 
@@ -96,9 +97,15 @@ public class DashboardFragment extends Fragment {
                 case R.id.menu_settings:
                     navController.navigate(R.id.action_dashboardFragment_to_settingsFragment);
                     break;
+                case R.id.menu_list:
+                    navController.navigate(R.id.action_dashboardFragment_to_historyFragment);
+                    break;
+
             }
             return false;
         });
+
+        binding.fab.setOnClickListener(view -> navController.navigate(R.id.action_dashboardFragment_to_invoiceCreateFragment));
 
     }
 

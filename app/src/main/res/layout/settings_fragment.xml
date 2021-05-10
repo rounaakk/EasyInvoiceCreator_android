@@ -9,6 +9,9 @@
         <variable
             name="viewModel"
             type="tech.rounak.invoice.ui.settings.SettingsViewModel" />
+        <variable
+            name="settingsAdapter"
+            type="tech.rounak.invoice.adapters.ProfileAdapter" />
 
     </data>
 
@@ -38,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="16dp"
                 android:fontFamily="@font/raleway_bold"
-                android:text="Settings"
+                android:text="Profile"
                 android:textColor="@color/primary_text"
                 android:textSize="32sp" />
 
@@ -52,18 +55,15 @@
                 android:textSize="18sp" />
 
 <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/settingsRecyclerView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"/>
+    android:layout_height="wrap_content"
+    android:adapter="@{settingsAdapter}"/>
 
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-
-    <FrameLayout
-        android:id="@+id/scrim"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

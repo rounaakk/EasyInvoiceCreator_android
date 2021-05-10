@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.createInvoice.InvoiceCreateFragment">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="tech.rounak.invoice.ui.createInvoice.InvoiceCreateViewModel" />
+
+    </data>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:background="#f2f3f4"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.createInvoice.InvoiceCreateFragment">
+    android:layout_height="match_parent">
 
     <!-- Note: A RecyclerView can also be used -->
     <androidx.core.widget.NestedScrollView
@@ -51,6 +60,21 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.name}"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mobile Number"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={viewModel.mobile}"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -65,6 +89,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.gst}"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -79,6 +104,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.billingAddress}"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -93,6 +119,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={viewModel.shippingAddress}"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -107,25 +134,33 @@
                 android:textColor="@color/primary_text"
                 android:textSize="18sp" />
 
-
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:id="@+id/productRecyclerView"/>
 
-
-                <include layout="@layout/card_product"/>
-
-
-
-
-            </LinearLayout>
-
-
+            <Button
+                android:id="@+id/btn_add_product"
+            android:layout_marginVertical="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Product"/>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/bottom_sheet_behavior"
+        tools:visibility="gone"
+        app:behavior_hideable="true"
+        app:headerLayout="@layout/drawer_header"
+        android:backgroundTint="@color/background_offwhite"
+        app:menu="@menu/drawer_menu" />
+
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
@@ -138,10 +173,11 @@
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorAccent"
-        app:srcCompat="@drawable/ic_add_24"
+        app:srcCompat="@drawable/ic_save_24"
         app:layout_anchor="@id/bottomAppBar"
         app:tint="@android:color/white"
 
@@ -150,3 +186,4 @@
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

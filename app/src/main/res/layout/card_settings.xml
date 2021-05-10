@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:paddingVertical="16dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_value"
+    <data>
+        <variable
+            name="profileItem"
+            type="tech.rounak.invoice.models.ProfileCardModel" />
+
+
+    </data>
+
+    <LinearLayout
+        android:paddingVertical="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_black87"
-        android:textSize="18sp"
-        tools:text="New Minerva Sports" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_key"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/company_name" />
+        <TextView
+            android:id="@+id/tv_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_black87"
+            android:textSize="18sp"
+            android:text="@{profileItem.item}"
+            tools:text="New Minerva Sports" />
+
+        <TextView
+            android:id="@+id/tv_profile_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{profileItem.itemDesc}"
+            tools:text="@string/company_name" />
 
 
-</LinearLayout>
+    </LinearLayout>
+
+
+
+
+</layout>
