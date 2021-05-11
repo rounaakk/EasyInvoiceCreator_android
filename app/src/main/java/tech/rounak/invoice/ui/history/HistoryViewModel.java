@@ -56,6 +56,7 @@ public class HistoryViewModel extends ViewModel {
                             InvoiceModel invoiceModel = document.toObject(InvoiceModel.class);
                             invoiceModels.add(invoiceModel);
                         }
+                        invoiceModelsLiveData.setValue(invoiceModels);
 //                      Log.d(TAG, "onComplete: " + document.getData());
                     } else {
                         Log.d(TAG, "No such document");

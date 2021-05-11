@@ -56,12 +56,16 @@ public class HistoryFragment extends Fragment {
 
     public void setupRecyclerView(){
 
+
+
+
         mViewModel.getInvoiceModelsLiveData().observe(getViewLifecycleOwner(), new Observer<List<InvoiceModel>>() {
             @Override
             public void onChanged(List<InvoiceModel> invoiceModels) {
-                InvoiceAdapter invoiceAdapter = new InvoiceAdapter(invoiceModels, getContext());
-                binding.setInvoiceAdapter(invoiceAdapter);
+                InvoiceAdapter invoiceAdapter = new InvoiceAdapter(invoiceModels,getContext());
+                binding.historyRecyclerview.setAdapter(invoiceAdapter);
                 binding.historyRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+//                invoiceAdapter.setInvoiceModels(invoiceModels);
             }
         });
 

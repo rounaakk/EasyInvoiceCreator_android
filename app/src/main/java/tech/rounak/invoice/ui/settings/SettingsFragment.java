@@ -19,6 +19,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import tech.rounak.invoice.R;
 import tech.rounak.invoice.adapters.ProfileAdapter;
@@ -69,10 +70,13 @@ public class SettingsFragment extends Fragment {
                 ProfileAdapter profileAdapter = new ProfileAdapter(profileCardModels,getContext());
                 binding.setSettingsAdapter(profileAdapter);
                 binding.settingsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                binding.settingsRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
             }
         });
 
     }
+
+
 
 
     public void setupBottomAppBar(){

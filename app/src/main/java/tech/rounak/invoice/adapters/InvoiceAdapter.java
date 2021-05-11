@@ -7,7 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +19,7 @@ import tech.rounak.invoice.models.InvoiceModel;
 
 public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceCardHolder> {
 
-    private List<InvoiceModel> invoiceModels ;
+    private List<InvoiceModel> invoiceModels = new ArrayList<>();
     private Context ctx;
 
     public InvoiceAdapter(List<InvoiceModel> invoiceModels, Context ctx){
@@ -38,12 +41,24 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceC
 
         InvoiceModel invoiceModel = invoiceModels.get(position);
         holder.name.setText(invoiceModel.getCustomerName());
-        holder.date.setText(invoiceModel.getTimestamp().toDate().toString());
+//        holder.date.setText(invoiceModel.getTimestamp().toDate().toString());
         holder.currency.setText(invoiceModel.getCurrency());
         holder.price.setText(invoiceModel.getTotal());
-        holder.invNumber.setText(invoiceModel.getInvoiceNumber());
+        holder.invNumber.setText("Invoice ID - " + invoiceModel.getInvoiceNumber());
+
+        SimpleDateFormat pattern = new SimpleDateFormat("dd.MM.yyyy | hh:mm aaa", Locale.getDefault());
+        String date = pattern.format(invoiceModel.getTimestamp().toDate());
+        holder.date.setText(date);
 
 
+
+    }
+
+
+    public void setInvoiceModels(List<InvoiceModel> invoiceModels){
+
+        this.invoiceModels=invoiceModels;
+        notifyDataSetChanged();
 
     }
 

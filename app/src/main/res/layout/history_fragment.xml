@@ -9,10 +9,6 @@
         <variable
             name="viewModel"
             type="tech.rounak.invoice.ui.history.HistoryViewModel" />
-        <variable
-            name="invoiceAdapter"
-            type="tech.rounak.invoice.adapters.InvoiceAdapter" />
-
     </data>
 
 
@@ -47,7 +43,6 @@
                 android:id="@+id/history_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:adapter="@{invoiceAdapter}"
                 tools:listitem="@layout/card_invoice"/>
 
         </LinearLayout>

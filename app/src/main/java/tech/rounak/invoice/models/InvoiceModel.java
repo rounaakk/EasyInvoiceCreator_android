@@ -32,13 +32,12 @@ public class InvoiceModel {
     }
 
     public InvoiceModel(String customerName, String customerGstin, String mobile, String billingAddress, String shippingAddress, ArrayList<ProductModel> products, int invoiceNumber, String currency) {
-        this.customerName = customerName;
-        this.customerGstin = customerGstin;
-        this.mobile = mobile;
-        this.billingAddress = billingAddress;
-        this.shippingAddress = shippingAddress;
+        this.customerName = customerName.length()==0?"Cash":customerName;
+        this.customerGstin = customerGstin.length()==0?"N/A":customerGstin;
+        this.mobile = mobile.length()==0?"N/A":mobile;
+        this.billingAddress = billingAddress.length()==0?"N/A":billingAddress;
+        this.shippingAddress = shippingAddress.length()==0?"N/A":shippingAddress;
         this.products = products;
-//        this.timestamp=timestamp;
         this.invoiceNumber=String.valueOf(invoiceNumber);
         this.currency=currency;
 
@@ -77,17 +76,11 @@ public class InvoiceModel {
         return invoiceNumber;
     }
 
+
     public void setInvoiceNumber(String invoiceNumber) {
         this.invoiceNumber = invoiceNumber;
     }
 
-
-    public String getDateTime(){
-
-//        String dateTime = timestamp.toString();
-//        return  dateTime;
-        return "test";
-    }
 
     public String getCurrency() {
         return currency;
@@ -96,11 +89,6 @@ public class InvoiceModel {
     public void setCurrency(String currency) {
         this.currency = currency;
     }
-
-    public String getInvoiceFullText(){
-        return "Invoice No.: " + invoiceNumber;
-    }
-
 
 
     public String getTotal() {

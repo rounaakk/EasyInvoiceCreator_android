@@ -27,20 +27,20 @@ public class UserModel {
     }
 
     public UserModel(String companyName, String mobileNumber, String emailAddress, String gstin, String pan, String address, String city, String state, String pin, String accountName, String bankName, String branchName, String accountNumber, String ifsc) {
-        this.companyName = companyName;
-        this.mobileNumber = mobileNumber;
-        this.emailAddress = emailAddress;
-        this.gstin = gstin;
-        this.pan = pan;
-        this.address = address;
-        this.city = city;
-        this.state = state;
-        this.pin = pin;
-        this.accountName = accountName;
-        this.bankName = bankName;
-        this.branchName = branchName;
-        this.accountNumber = accountNumber;
-        this.ifsc = ifsc;
+        this.companyName = companyName.length()==0?"My Company":companyName;
+        this.mobileNumber = mobileNumber.length()==0?"N/A":mobileNumber;
+        this.emailAddress = emailAddress.length()==0?"N/A":emailAddress;
+        this.gstin = gstin.length()==0?"N/A":gstin;
+        this.pan = pan.length()==0?"N/A":pan;
+        this.address = address.length()==0?"N/A":address;
+        this.city = city.length()==0?"N/A":city;
+        this.state = state.length()==0?"N/A":state;
+        this.pin = pin.length()==0?"N/A":pin;
+        this.accountName = accountName.length()==0?"N/A":accountName;
+        this.bankName = bankName.length()==0?"N/A":bankName;
+        this.branchName = branchName.length()==0?"N/A":branchName;
+        this.accountNumber = accountNumber.length()==0?"N/A":accountNumber;
+        this.ifsc = ifsc.length()==0?"N/A":ifsc;
     }
 
     public String getCurrency() {
