@@ -23,6 +23,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
         release {
             minifyEnabled false
@@ -30,6 +31,13 @@ android {
         }
     }
 }
+
+
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
+
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -59,6 +67,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.3.1"
     implementation "androidx.lifecycle:lifecycle-livedata:2.3.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    //Charts 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

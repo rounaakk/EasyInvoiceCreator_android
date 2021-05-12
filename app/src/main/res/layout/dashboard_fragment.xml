@@ -21,36 +21,41 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
     >
 
-    <!-- Note: A RecyclerView can also be used -->
-<androidx.core.widget.NestedScrollView
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:paddingBottom="100dp"
-android:clipToPadding="false">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="90dp">
+
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_bold"
             android:paddingHorizontal="16dp"
             android:paddingTop="16dp"
-            android:fontFamily="@font/raleway_bold"
             android:text="Dashboard"
             android:textColor="@color/primary_text"
             android:textSize="32sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="16dp"
             android:fontFamily="@font/raleway_medium"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/primary_text"
             android:textStyle="bold"
-            tools:text="New Minerva Sports"
-            android:textColor="@color/primary_text" />
+            android:text="Minerva Sports" />
 
         <TextView
             android:layout_width="match_parent"
@@ -66,23 +71,22 @@ android:clipToPadding="false">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:padding="16dp"
-            android:weightSum="2"
-            android:orientation="horizontal">
+            android:weightSum="2">
 
             <androidx.cardview.widget.CardView
-                android:layout_marginEnd="8dp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                app:cardCornerRadius="10dp"
-                android:backgroundTint="@color/colorAccent">
+                android:backgroundTint="@color/colorAccent"
+                app:cardCornerRadius="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="16dp"
-                    >
+                    android:padding="16dp">
 
                     <TextView
                         android:id="@+id/tv1"
@@ -90,6 +94,7 @@ android:clipToPadding="false">
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="Today"
+                        android:textColor="@android:color/white"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -97,14 +102,26 @@ android:clipToPadding="false">
 
 
                     <TextView
+                        android:id="@+id/textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Rs. 85364"
+                        android:textColor="@android:color/white"
                         android:textSize="24dp"
+                        android:text="Rs. 75465"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv1" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:text="26 Customers"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -114,24 +131,24 @@ android:clipToPadding="false">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_height="100dp"
-                app:cardCornerRadius="10dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/colorAccent">
+                android:backgroundTint="@color/colorAccent"
+                app:cardCornerRadius="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="16dp"
-                    >
+                    android:padding="16dp">
 
                     <TextView
                         android:id="@+id/tv2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
-                        android:text="Monthly"
+                        android:textColor="@android:color/white"
+                        android:text="This Month"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -139,14 +156,25 @@ android:clipToPadding="false">
 
 
                     <TextView
+                        android:id="@+id/textView2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
                         android:layout_marginTop="16dp"
-                        android:text="Rs. 85364"
+                        android:text="Rs. 865235"
                         android:textSize="24dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv2" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:text="256 Customers"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -154,16 +182,39 @@ android:clipToPadding="false">
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp"
+            android:text="Weekly Stats"
+            android:textColor="@color/primary_text"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
 
-
-    <FrameLayout
-        android:id="@+id/scrim"
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/barChart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_marginTop="16dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/scrim"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" />-->
 
 <com.google.android.material.navigation.NavigationView
     android:id="@+id/nav_view"

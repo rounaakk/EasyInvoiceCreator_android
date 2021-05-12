@@ -13,11 +13,11 @@ import tech.rounak.invoice.utils.NumberToWord;
  **/
 public class InvoiceModel {
 
-    private String customerName;
-    private String customerGstin;
-    private String mobile;
-    private String billingAddress;
-    private String shippingAddress;
+    private String customerName="Cash";
+    private String customerGstin="N/A";
+    private String mobile="N/A";
+    private String billingAddress="N/A";
+    private String shippingAddress="N/A";
     private String total;
     private String totalInWords;
     @ServerTimestamp
@@ -32,11 +32,11 @@ public class InvoiceModel {
     }
 
     public InvoiceModel(String customerName, String customerGstin, String mobile, String billingAddress, String shippingAddress, ArrayList<ProductModel> products, int invoiceNumber, String currency) {
-        this.customerName = customerName.length()==0?"Cash":customerName;
-        this.customerGstin = customerGstin.length()==0?"N/A":customerGstin;
-        this.mobile = mobile.length()==0?"N/A":mobile;
-        this.billingAddress = billingAddress.length()==0?"N/A":billingAddress;
-        this.shippingAddress = shippingAddress.length()==0?"N/A":shippingAddress;
+        this.customerName = customerName==null?"Cash":customerName;
+        this.customerGstin = customerGstin==null?"N/A":customerGstin;
+        this.mobile = mobile==null?"N/A":mobile;
+        this.billingAddress = billingAddress==null?"N/A":billingAddress;
+        this.shippingAddress = shippingAddress==null?"N/A":shippingAddress;
         this.products = products;
         this.invoiceNumber=String.valueOf(invoiceNumber);
         this.currency=currency;

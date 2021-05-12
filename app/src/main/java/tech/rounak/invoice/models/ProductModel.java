@@ -1,7 +1,5 @@
 package tech.rounak.invoice.models;
 
-import java.util.Locale;
-
 /**
  * Created by Rounak
  * For more info visit https://rounak.tech
@@ -42,11 +40,11 @@ public class ProductModel {
 
         double productTotal = subTotal+sgstAmt+cgstAmt+igstAmt;
 
-        this.subTotal=String.format(Locale.US,"%.2f", subTotal);
-        this.cgstAmt=String.format(Locale.US,"%.2f", cgstAmt);
-        this.sgstAmt=String.format(Locale.US,"%.2f", sgstAmt);
-        this.igstAmt=String.format(Locale.US,"%.2f", igstAmt);
-        this.productTotal=String.format(Locale.US,"%.2f", productTotal);
+        this.subTotal= String.valueOf(Math.round(subTotal));
+        this.cgstAmt=String.valueOf(Math.round(cgstAmt));
+        this.sgstAmt=String.valueOf(Math.round(sgstAmt));
+        this.igstAmt=String.valueOf(Math.round(igstAmt));
+        this.productTotal=String.valueOf(Math.round(productTotal));
 
     }
 

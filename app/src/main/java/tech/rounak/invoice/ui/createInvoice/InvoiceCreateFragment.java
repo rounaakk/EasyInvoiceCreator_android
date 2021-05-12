@@ -35,6 +35,8 @@ public class InvoiceCreateFragment extends Fragment {
     ArrayList<ProductModel> productModels;
     ProductAdapter productAdapter;
     int serialNumber;
+
+
     public static InvoiceCreateFragment newInstance() {
         return new InvoiceCreateFragment();
     }
@@ -87,10 +89,14 @@ public class InvoiceCreateFragment extends Fragment {
         return binding.getRoot();
     }
 
+
+
+
     public void setupBottomAppBar(){
 
         bottomSheetBehavior = BottomSheetBehavior.from(binding.navView);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
 
         //Managing BottomAppBarUi
         binding.bottomAppBar.setNavigationOnClickListener(view -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));

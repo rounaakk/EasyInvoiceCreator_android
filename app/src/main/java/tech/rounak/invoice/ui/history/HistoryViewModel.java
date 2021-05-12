@@ -43,6 +43,8 @@ public class HistoryViewModel extends ViewModel {
 
         CollectionReference colRef = db.collection("users/"+currentUser.getUid()+"/bills");
 
+
+
         colRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

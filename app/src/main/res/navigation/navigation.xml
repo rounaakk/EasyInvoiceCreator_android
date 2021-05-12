@@ -28,7 +28,12 @@
         android:id="@+id/historyFragment"
         android:name="tech.rounak.invoice.ui.history.HistoryFragment"
         android:label="history_fragment"
-        tools:layout="@layout/history_fragment" />
+        tools:layout="@layout/history_fragment" >
+        <action
+            android:id="@+id/action_historyFragment_pop"
+            app:popUpTo="@id/historyFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/invoiceCreateFragment"
         android:name="tech.rounak.invoice.ui.createInvoice.InvoiceCreateFragment"

@@ -2,20 +2,26 @@ package tech.rounak.invoice.adapters;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import tech.rounak.invoice.R;
 import tech.rounak.invoice.models.InvoiceModel;
+import tech.rounak.invoice.utils.InvoicePdfCreator;
 
 public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceCardHolder> {
 
@@ -84,10 +90,47 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceC
             invNumber = itemView.findViewById(R.id.bill_id);
             price = itemView.findViewById(R.id.money);
             currency=itemView.findViewById(R.id.tv_currency);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        InvoiceModel invoiceModel = invoiceModels.get(position);
+                        String fileName = invoiceModel.getInvoiceNumber() + "_" + invoiceModel.getTimestamp().toDate().toString();
+                        createPdf(invoiceModel);
+                        readPdf(fileName);
+                    }
+
+                }
+            });
         }
 
-
     }
+
+
+
+    public boolean createPdf(InvoiceModel invoiceModel){
+        InvoicePdfCreator.createPdf(ctx, invoiceModel);
+        return true;
+    }
+
+    public boolean readPdf(String fileName){
+
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/invoices/" + fileName +".pdf");
+        Uri contentUri = FileProvider.getUriForFile(ctx, ctx.getApplicationContext().getPackageName() + ".provider", file);
+        Intent intent = new Intent(Intent.ACTION_VIEW, contentUri);
+        intent.setDataAndType(contentUri, "application/pdf");
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        ctx.startActivity(intent);
+
+        return true;
+    }
+
+
+
+
+
 
 }
 
