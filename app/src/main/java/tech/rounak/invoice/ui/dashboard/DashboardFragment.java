@@ -6,6 +6,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -17,6 +18,8 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +32,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
@@ -68,10 +72,10 @@ public class DashboardFragment extends Fragment {
         mViewModel = new ViewModelProvider(storeOwner).get(DashboardViewModel.class);
         binding.setViewModel(mViewModel);
         setupBottomAppBar();
-        mViewModel.fetchInvoices();
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+
         if(currentUser != null){
             updateDashboard();
         }else{
@@ -91,7 +95,6 @@ public class DashboardFragment extends Fragment {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         //Managing BottomAppBarUi
-//        binding.scrim.setOnClickListener(view -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN));
         binding.bottomAppBar.setNavigationOnClickListener(view -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
 
 
@@ -99,6 +102,15 @@ public class DashboardFragment extends Fragment {
             switch (item.getItemId()) {
                 case R.id.drawer_create_invoice:
                     navController.navigate(R.id.action_dashboardFragment_to_invoiceCreateFragment);
+                    break;
+                case R.id.drawer_settings:
+                    navController.navigate(R.id.action_dashboardFragment_to_settingsFragment);
+                    break;
+                case R.id.drawer_invoice_history:
+                    navController.navigate(R.id.action_dashboardFragment_to_historyFragment);
+                    break;
+                case R.id.drawer_logout:
+                    logout();
                     break;
             }
 
@@ -110,6 +122,7 @@ public class DashboardFragment extends Fragment {
             switch (item.getItemId()) {
                 case R.id.menu_settings:
                     navController.navigate(R.id.action_dashboardFragment_to_settingsFragment);
+//                    signIn();
                     break;
                 case R.id.menu_list:
                     navController.navigate(R.id.action_dashboardFragment_to_historyFragment);
@@ -125,10 +138,35 @@ public class DashboardFragment extends Fragment {
 
     public void updateDashboard(){
 
+
+        mViewModel.fetchData();
+
+        mViewModel.getWeeklySalesLiveData().observe(getViewLifecycleOwner(), new Observer<Float[]>() {
+            @Override
+            public void onChanged(Float[] floats) {
+                createChart(floats);
+
+            }
+        });
+
+        mViewModel.getCompanyNameMutableLiveData().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                TextView user_tv = binding.navView.getHeaderView(0).findViewById(R.id.drawer_username);
+                TextView company_tv =binding.navView.getHeaderView(0).findViewById(R.id.company_name_drawer);
+
+                user_tv.setText(currentUser.getDisplayName());
+                company_tv.setText(s);
+            }
+        });
+
+    }
+
+    private void createChart(Float[] incomes){
+
         chart =binding.barChart;
 
-//        BarData data = new BarData(getDataSet());
-        LineData data = new LineData(getDataSet());
+        LineData data = new LineData(getDataSet(incomes));
 
         TypedValue typedValue = new TypedValue();
         getContext().getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
@@ -136,51 +174,39 @@ public class DashboardFragment extends Fragment {
 
         data.setValueTextColor(color);
         data.setValueTextSize(9f);
-
-//        data.setValueTextSize(12f);
         configureChartAppearance();
-//        configureLineChart();
         chart.setData(data);
         chart.invalidate();
 
     }
 
 
-
-    private LineDataSet getDataSet(){
+    private LineDataSet getDataSet(Float[] incomes){
 
         List<Entry> dataset = new ArrayList<>();
 
-        dataset.add(new Entry(0, 0f));
-        dataset.add(new Entry(1, 26586f));
-        dataset.add(new Entry(2,12365f));
-        dataset.add(new Entry(3,43568f ));
-        dataset.add(new Entry(4, 36594f));
-        dataset.add(new Entry(5, 57000));
-        dataset.add(new Entry(6, 75465f));
+        for(int i =0; i<incomes.length; i++){
+            dataset.add(new Entry(i, incomes[i]));
+        }
 
-        LineDataSet set = new LineDataSet(dataset, "Test set");
+        LineDataSet set = new LineDataSet(dataset, "Incomes");
 
         TypedValue typedValue = new TypedValue();
         getContext().getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
         int color = typedValue.data;
 
-//        MaterialColors.getColor(getContext(), R.attr.colorAccent,getContext().getResources().getColor());
         set.setColor(color);
         set.setCircleColor(color);
         set.setLineWidth(3f);
         set.setFillAlpha(10);
         set.setCircleHoleRadius(3f);
         set.setCircleRadius(6f);
-
         set.setDrawCircles(true);
 
         return set;
 
 
     }
-
-
 
     private void configureChartAppearance() {
         chart.getDescription().setEnabled(false);
@@ -228,6 +254,16 @@ public class DashboardFragment extends Fragment {
                         .build(),
                 RC_SIGN_IN);
 
+    }
+
+    public void logout(){
+        AuthUI.getInstance()
+                .signOut(getContext())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                            signIn();
+                    }
+                });
     }
 
     @Override

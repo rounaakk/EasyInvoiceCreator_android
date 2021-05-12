@@ -9,9 +9,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -44,8 +46,11 @@ public class HistoryViewModel extends ViewModel {
         CollectionReference colRef = db.collection("users/"+currentUser.getUid()+"/bills");
 
 
+        Query orderedInvoices = colRef
+                .orderBy("timestamp", Query.Direction.DESCENDING);
 
-        colRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        orderedInvoices.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
@@ -73,5 +78,47 @@ public class HistoryViewModel extends ViewModel {
 
 
     }
+
+    public void fetchInvoices(Date startDate, Date endDate){
+
+        invoiceModels.clear();
+        invoiceModelsLiveData.setValue(invoiceModels);
+        CollectionReference colRef = db.collection("users/"+currentUser.getUid()+"/bills");
+
+        Query orderedInvoices = colRef.whereGreaterThanOrEqualTo("timestamp" , startDate)
+                .whereLessThanOrEqualTo("timestamp", endDate)
+                .orderBy("timestamp", Query.Direction.DESCENDING);
+
+        orderedInvoices.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                    if (documents.size()>0) {
+                        for(DocumentSnapshot document:documents){
+
+                            Log.d(TAG, "DATA" + document.getData());
+                            InvoiceModel invoiceModel = document.toObject(InvoiceModel.class);
+                            invoiceModels.add(invoiceModel);
+                        }
+                        invoiceModelsLiveData.setValue(invoiceModels);
+//                      Log.d(TAG, "onComplete: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+
+            }
+        });
+
+
+
+    }
+
+
 
 }

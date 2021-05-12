@@ -296,17 +296,6 @@ android:layout_height="match_parent">
 
 
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        tools:visibility="gone"
-        app:behavior_hideable="true"
-        app:headerLayout="@layout/drawer_header"
-        android:backgroundTint="@color/background_offwhite"
-        app:menu="@menu/drawer_menu" />
-
 <com.google.android.material.bottomappbar.BottomAppBar
     android:id="@+id/bottomAppBar"
     android:layout_width="match_parent"
@@ -314,7 +303,6 @@ android:layout_height="match_parent">
     android:layout_gravity="bottom"
     app:fabAlignmentMode="end"
     style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-    app:navigationIcon="@drawable/ic_menu_24"
     />
 
 <com.google.android.material.floatingactionbutton.FloatingActionButton

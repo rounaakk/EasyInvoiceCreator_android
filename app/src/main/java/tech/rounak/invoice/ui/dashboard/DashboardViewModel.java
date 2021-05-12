@@ -7,21 +7,27 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.ObservableField;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import tech.rounak.invoice.models.InvoiceModel;
+import tech.rounak.invoice.models.UserModel;
 
 public class DashboardViewModel extends ViewModel {
 
@@ -32,8 +38,7 @@ public class DashboardViewModel extends ViewModel {
     FirebaseUser currentUser;
     Calendar cal;
 
-    List<Integer> weeklySalesList = new ArrayList<>();
-    MutableLiveData<List<Integer>> weeklySalesMutableLiveData = new MutableLiveData<>();
+    MutableLiveData<Float[]> weeklySalesMutableLiveData = new MutableLiveData<>();
 
     public ObservableField<String> monthSales = new ObservableField<>();
     public ObservableField<String> monthMoney = new ObservableField<>();
@@ -42,14 +47,54 @@ public class DashboardViewModel extends ViewModel {
     public ObservableField<String> todayMoney = new ObservableField<>();
 
 
-//    public LiveData<List<InvoiceModel>> getInvoiceModelsLiveData() {
+    public ObservableField<String> companyName = new ObservableField<>();
+
+    MutableLiveData<String> companyNameMutableLiveData = new MutableLiveData<>();
+
+    public LiveData<Float[]> getWeeklySalesLiveData() {
+        return weeklySalesMutableLiveData;
+    }
+
+    public LiveData<String> getCompanyNameMutableLiveData() {
+        return companyNameMutableLiveData;
+    }
+
+    //    public LiveData<List<InvoiceModel>> getInvoiceModelsLiveData() {
 //        return invoiceModelsLiveData;
 //    }
 
-    public void fetchInvoices(){
+    public void fetchData(){
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+
+
+
+        DocumentReference docRef = db.collection("users").document(currentUser.getUid());
+
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+//                    Log.d(TAG, "Current data: " + snapshot.getData());
+                    UserModel userModel = snapshot.toObject(UserModel.class);
+                    companyName.set(userModel.getCompanyName());
+                    companyNameMutableLiveData.setValue(userModel.getCompanyName());
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            }
+        });
+
+
+
+
         cal = Calendar.getInstance();
 
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -57,6 +102,7 @@ public class DashboardViewModel extends ViewModel {
         cal.clear(Calendar.SECOND);
         cal.clear(Calendar.MILLISECOND);
         Date todayStart = new Date(cal.getTimeInMillis());
+        int todayWeekDay = cal.get(Calendar.DAY_OF_WEEK);
 
         cal.clear();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -121,36 +167,58 @@ public class DashboardViewModel extends ViewModel {
         });
 
 
+        weekQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-//        colRef.where('startTime', '>=', start).where('startTime', '<=', end).get().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//
-//                if (task.isSuccessful()) {
-//                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
-//                    if (documents.size()>0) {
-//                        for(DocumentSnapshot document:documents){
-//
-//                            Log.d(TAG, "DATA" + document.getData());
-//                            InvoiceModel invoiceModel = document.toObject(InvoiceModel.class);
-//                            invoiceModels.add(invoiceModel);
-//                        }
-//                        invoiceModelsLiveData.setValue(invoiceModels);
-////                      Log.d(TAG, "onComplete: " + document.getData());
-//                    } else {
-//                        Log.d(TAG, "No such document");
-//                    }
-//                } else {
-//                    Log.d(TAG, "get failed with ", task.getException());
-//                }
-//
-//            }
-//        });
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                    if (documents.size()>0) {
 
+//                        List<Float> dayIncomes = new ArrayList<>(7);
+                        Float[] dayIncomes = new Float[7];
+                        Arrays.fill(dayIncomes,0f);
+                        String currency="";
+                        int todaySalesCount=0;
 
+                        Calendar cal = Calendar.getInstance();
+                        for(DocumentSnapshot document:documents){
+                            Log.d(TAG, "DATA" + document.getData());
+
+                            InvoiceModel invoiceModel = document.toObject(InvoiceModel.class);
+                            currency =invoiceModel.getCurrency();
+                            cal.setTime(invoiceModel.getTimestamp().toDate());
+
+                            int day = cal.get(Calendar.DAY_OF_WEEK);
+                            
+//                            if(invoiceModel.getTotal()==null){
+//                                Log.d(TAG, "onComplete: getTotal is null");
+//                            }else{
+//                                Log.d(TAG, "onComplete: getTotal is NOT null" + dayIncomes[day]);
+//
+//                            }
+                            dayIncomes[day-1]+=Float.parseFloat(invoiceModel.getTotal());
+                            if(day+1==todayWeekDay){
+                                todaySalesCount++;
+                            }
+                        }
+                        weeklySalesMutableLiveData.setValue(dayIncomes);
+                        todayMoney.set(currency + ". " + dayIncomes[todayWeekDay-1]);
+                        todaySales.set(todaySalesCount + " Customers");
+//                      Log.d(TAG, "onComplete: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+
+            }
+        });
 
 
     }
+
 
 
 }

@@ -48,7 +48,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceC
         InvoiceModel invoiceModel = invoiceModels.get(position);
         holder.name.setText(invoiceModel.getCustomerName());
 //        holder.date.setText(invoiceModel.getTimestamp().toDate().toString());
-        holder.currency.setText(invoiceModel.getCurrency());
+        holder.currency.setText(invoiceModel.getCurrency() +".");
         holder.price.setText(invoiceModel.getTotal());
         holder.invNumber.setText("Invoice ID - " + invoiceModel.getInvoiceNumber());
 
@@ -97,8 +97,8 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceC
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         InvoiceModel invoiceModel = invoiceModels.get(position);
-                        String fileName = invoiceModel.getInvoiceNumber() + "_" + invoiceModel.getTimestamp().toDate().toString();
-                        createPdf(invoiceModel);
+                        String fileName = "Invoice" +invoiceModel.getInvoiceNumber() + "_" + invoiceModel.getTimestamp().toString();
+                        createPdf(invoiceModel,fileName);
                         readPdf(fileName);
                     }
 
@@ -110,8 +110,10 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceC
 
 
 
-    public boolean createPdf(InvoiceModel invoiceModel){
-        InvoicePdfCreator.createPdf(ctx, invoiceModel);
+    public boolean createPdf(InvoiceModel invoiceModel, String filename){
+        List<InvoiceModel> invoices = new ArrayList<>();
+        invoices.add(invoiceModel);
+        InvoicePdfCreator.createPdf(ctx, invoices,filename);
         return true;
     }
 

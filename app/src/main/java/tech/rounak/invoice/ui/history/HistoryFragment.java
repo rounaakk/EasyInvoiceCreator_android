@@ -1,21 +1,31 @@
 package tech.rounak.invoice.ui.history;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,17 +36,19 @@ import tech.rounak.invoice.R;
 import tech.rounak.invoice.adapters.InvoiceAdapter;
 import tech.rounak.invoice.databinding.HistoryFragmentBinding;
 import tech.rounak.invoice.models.InvoiceModel;
+import tech.rounak.invoice.utils.InvoicePdfCreator;
 
 public class HistoryFragment extends Fragment {
 
     private HistoryViewModel mViewModel;
     HistoryFragmentBinding binding;
     NavController navController;
-    BottomSheetBehavior bottomSheetBehavior;
 
     final int WRITE_PERMISSION_CODE = 102;
     final int READ_PERMISSION_CODE = 103;
-    List<InvoiceModel> invoiceModels;
+
+
+    List<InvoiceModel> invoiceModelList;
     public static HistoryFragment newInstance() {
         return new HistoryFragment();
     }
@@ -47,6 +59,8 @@ public class HistoryFragment extends Fragment {
 
         binding = HistoryFragmentBinding.inflate(inflater,container,false);
         binding.setLifecycleOwner(this);
+
+
 
         mViewModel = new ViewModelProvider(this).get(HistoryViewModel.class);
         binding.setViewModel(mViewModel);
@@ -72,52 +86,96 @@ public class HistoryFragment extends Fragment {
 
     public void setupRecyclerView(){
 
-
-
-
         mViewModel.getInvoiceModelsLiveData().observe(getViewLifecycleOwner(), new Observer<List<InvoiceModel>>() {
             @Override
             public void onChanged(List<InvoiceModel> invoiceModels) {
-
+                invoiceModelList=invoiceModels;
                 InvoiceAdapter invoiceAdapter = new InvoiceAdapter(invoiceModels,getContext());
                 binding.historyRecyclerview.setAdapter(invoiceAdapter);
                 binding.historyRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-//                invoiceAdapter.setInvoiceModels(invoiceModels);
             }
         });
 
     }
 
 
+    public void initDatePicker(){
+
+        MaterialDatePicker.Builder<Pair<Long, Long>> materialDateBuilder = MaterialDatePicker.Builder.dateRangePicker();
+        materialDateBuilder.setTitleText("Select Range");
+        materialDateBuilder.setSelection(
+                new  Pair(
+                MaterialDatePicker.thisMonthInUtcMilliseconds(),
+                MaterialDatePicker.todayInUtcMilliseconds()
+        ));
+
+        final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
+
+        materialDatePicker.show(getParentFragmentManager(),"MATERIAL_DATE_PICKER");
+
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+
+//                Get the selected DATE RANGE
+                Pair<Long,Long> selectedDates = (Pair<Long, Long>) selection;
+                final Pair<Date, Date> rangeDate = new Pair<>(new Date(selectedDates.first), new Date(selectedDates.second));
+//              assigned variables
+                Date startDate = rangeDate.first;
+                Date endDate = rangeDate.second;
+
+                mViewModel.fetchInvoices(startDate,endDate);
+            }
+        });
+
+    }
+
     public void setupBottomAppBar(){
 
-        bottomSheetBehavior = BottomSheetBehavior.from(binding.navView);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        binding.bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
 
-        //Managing BottomAppBarUi
-        binding.bottomAppBar.setNavigationOnClickListener(view -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED));
+                switch (item.getItemId()) {
+                    case R.id.menu_date_pick:
+                        initDatePicker();
 
+                }
 
-
-        binding.navView.setNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.drawer_create_invoice:
-                    Toast.makeText(getContext(), "Create Invoice", Toast.LENGTH_SHORT).show();
-                    break;
+                return false;
             }
-
-            return false;
         });
+
+
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(invoiceModelList.size()<1){
+                    Toast.makeText(getContext(), "No Records Found", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String fileName = "Report" + invoiceModelList.get(0).getTimestamp().toString()+"-"+invoiceModelList.get(invoiceModelList.size()-1).toString();
+                InvoicePdfCreator.createPdf(getContext(),invoiceModelList, fileName);
+                readPdf(fileName);
             }
         });
 
 
 
+    }
+
+    public boolean readPdf(String fileName){
+
+
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/invoices/" + fileName +".pdf");
+        Uri contentUri = FileProvider.getUriForFile(getContext(), requireActivity().getApplicationContext().getPackageName() + ".provider", file);
+        Intent intent = new Intent(Intent.ACTION_VIEW, contentUri);
+        intent.setDataAndType(contentUri, "application/pdf");
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        getContext().startActivity(intent);
+
+        return true;
     }
 
     public  boolean isReadStoragePermissionGranted() {

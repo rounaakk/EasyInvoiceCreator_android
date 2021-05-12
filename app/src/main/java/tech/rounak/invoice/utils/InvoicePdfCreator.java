@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.Nullable;
@@ -41,14 +42,31 @@ public class InvoicePdfCreator {
     static final String TAG = "PDF CREATOR";
 
     static String fileName;
-    static InvoiceModel invoiceModel;
+//    static InvoiceModel invoiceModel;
     static Context ctx;
 
+    static List<InvoiceModel> invoiceList;
 
-    public static void createPdf(Context context, InvoiceModel invoice){
+    static int creationType;
+    static final int SINGLE=0;
+    static final int LIST=1;
+
+
+//    public static void createPdf(Context context, InvoiceModel invoice){
+//
+//        ctx = context;
+//        invoiceModel=invoice;
+//        creationType=SINGLE;
+//        fetchProfileDetails();
+//
+//    }
+
+    public static void createPdf(Context context, List<InvoiceModel> invoices, String fileName){
 
         ctx = context;
-        invoiceModel=invoice;
+        InvoicePdfCreator.invoiceList=invoices;
+        InvoicePdfCreator.fileName = fileName;
+//        creationType=LIST;
         fetchProfileDetails();
 
     }
@@ -97,8 +115,13 @@ public class InvoicePdfCreator {
 
     public static void createPdfLayoutAndFillStats(UserModel userModel){
 
+//        int PAGES;
+//        if(creationType==SINGLE){
+//            PAGES =1;
+//        }else{
+        int PAGES=invoiceList.size();
+//        }
 
-        int PAGES =1;
 
         int PAGE_WIDTH = 600;
         int PAGE_HEIGHT = 800;
@@ -110,12 +133,18 @@ public class InvoicePdfCreator {
         final int sizeS = 7;
 
 
+//        if(PAGES==1){
+//            fileName= invoiceList.get(0).getInvoiceNumber() + "_" + invoiceList.get(0).getTimestamp().toDate().toString();
+//        }else{
+//            fileName = invoiceList.get(0).getTimestamp().toDate().toString();
+//        }
+
         PdfDocument pdfDocument = new PdfDocument();
         Paint textPaint = new Paint();
         Paint shapePaint = new Paint();
 
         for(int i = 1; i<=PAGES; i++){
-//            InvoiceModel invoiceModel= invoiceModels.get(i);
+            InvoiceModel invoiceModel= invoiceList.get(i-1);
 
             PdfDocument.PageInfo myPageInfo = new PdfDocument.PageInfo.Builder(PAGE_WIDTH,PAGE_HEIGHT,i).create();
             PdfDocument.Page page = pdfDocument.startPage(myPageInfo);
@@ -287,8 +316,6 @@ public class InvoicePdfCreator {
 
         //Save
 
-        fileName = invoiceModel.getInvoiceNumber() + "_" + invoiceModel.getTimestamp().toDate().toString();
-
         File file = new File(getFileStorageDir(),  fileName + ".pdf");
 
         try{
@@ -299,8 +326,13 @@ public class InvoicePdfCreator {
 
         pdfDocument.close();
 
+//        readPdf(fileName);
 
     }
+
+
+
+
 
 
 }
